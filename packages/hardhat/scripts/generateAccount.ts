@@ -13,7 +13,7 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
 
   const newEnvConfig = {
     ...existingEnvConfig,
-    DEPLOYER_PRIVATE_KEY: randomWallet.privateKey,
+    DEPLOYER_PRIVATE_KEY: randomWallet.privateKey
   };
 
   // Store in .env
