@@ -43,6 +43,9 @@
     "node": ">=18.18.0"
   },
   "dependencies": {
-    "@privy-io/react-auth": "latest"
+    "@privy-io/react-auth": "latest",
+    "@privy-io/server-auth": "^1.14.1",
+    "@supabase/ssr": "^0.5.1",
+    "@supabase/supabase-js": "^2.45.4"
   }
 }
