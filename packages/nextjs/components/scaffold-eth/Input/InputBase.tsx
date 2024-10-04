@@ -17,7 +17,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
   disabled,
   prefix,
   suffix,
-  reFocus,
+  reFocus
 }: InputBaseProps<T>) => {
   const inputReft = useRef<HTMLInputElement>(null);
 
@@ -32,7 +32,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
     (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value as unknown as T);
     },
-    [onChange],
+    [onChange]
   );
 
   // Runs only when reFocus prop is passed, useful for setting the cursor

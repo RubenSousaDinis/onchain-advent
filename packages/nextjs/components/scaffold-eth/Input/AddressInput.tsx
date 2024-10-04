@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { blo } from "blo";
+import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { Address, isAddress } from "viem";
 import { normalize } from "viem/ens";
@@ -23,14 +23,14 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     data: ensAddress,
     isLoading: isEnsAddressLoading,
     isError: isEnsAddressError,
-    isSuccess: isEnsAddressSuccess,
+    isSuccess: isEnsAddressSuccess
   } = useEnsAddress({
     name: settledValue,
     chainId: 1,
     query: {
       gcTime: 30_000,
-      enabled: isDebouncedValueLive && isENS(debouncedValue),
-    },
+      enabled: isDebouncedValueLive && isENS(debouncedValue)
+    }
   });
 
   const [enteredEnsName, setEnteredEnsName] = useState<string>();
@@ -38,14 +38,14 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     data: ensName,
     isLoading: isEnsNameLoading,
     isError: isEnsNameError,
-    isSuccess: isEnsNameSuccess,
+    isSuccess: isEnsNameSuccess
   } = useEnsName({
     address: settledValue as Address,
     chainId: 1,
     query: {
       enabled: isAddress(debouncedValue),
-      gcTime: 30_000,
-    },
+      gcTime: 30_000
+    }
   });
 
   const { data: ensAvatar, isLoading: isEnsAvatarLoading } = useEnsAvatar({
@@ -53,8 +53,8 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     chainId: 1,
     query: {
       enabled: Boolean(ensName),
-      gcTime: 30_000,
-    },
+      gcTime: 30_000
+    }
   });
 
   // ens => address
