@@ -25,7 +25,7 @@ export const RainbowKitCustomConnectButton = () => {
   const walletAddress = user?.wallet?.address;
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       const params = {
         privy_id: user.id,
       };
