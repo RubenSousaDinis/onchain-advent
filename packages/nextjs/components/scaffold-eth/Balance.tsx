@@ -16,9 +16,9 @@ export const Balance = ({ address }: BalanceProps) => {
   const {
     data: balance,
     isError,
-    isLoading,
+    isLoading
   } = useWatchBalance({
-    address,
+    address
   });
 
   if (!address || isLoading || balance === null) {

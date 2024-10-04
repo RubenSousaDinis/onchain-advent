@@ -14,8 +14,8 @@ export const wagmiConfig = createConfig({
   chains: [base, baseSepolia],
   transports: {
     [base.id]: http(),
-    [baseSepolia.id]: http(),
-  },
+    [baseSepolia.id]: http()
+  }
 });
 
 const queryClient = new QueryClient();
@@ -30,13 +30,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           appearance: {
             theme: "light",
             accentColor: "#676FFF",
-            logo: "https://your-logo-url",
+            logo: "https://your-logo-url"
           },
           embeddedWallets: {
-            createOnLogin: "all-users",
+            createOnLogin: "all-users"
           },
           defaultChain: baseSepolia,
-          supportedChains: [base, baseSepolia],
+          supportedChains: [base, baseSepolia]
         }}
       >
         <QueryClientProvider client={queryClient}>

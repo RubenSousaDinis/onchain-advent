@@ -70,7 +70,7 @@ export enum IntegerVariant {
   INT232 = "int232",
   INT240 = "int240",
   INT248 = "int248",
-  INT256 = "int256",
+  INT256 = "int256"
 }
 
 export const SIGNED_NUMBER_REGEX = /^-?\d+\.?\d*$/;

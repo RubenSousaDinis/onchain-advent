@@ -9,7 +9,7 @@ type AddressLinkWrapperProps = {
 export const AddressLinkWrapper = ({
   children,
   disableAddressLink,
-  blockExplorerAddressLink,
+  blockExplorerAddressLink
 }: AddressLinkWrapperProps) => {
   return disableAddressLink ? (
     <>{children}</>

@@ -1,11 +1,11 @@
 "use client";
 
 // @refresh reset
-import { useEffect } from "react";
 import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { usePrivy } from "@privy-io/react-auth";
+import { useEffect } from "react";
 import { Address } from "viem";
 
 /**
@@ -21,13 +21,13 @@ export const LoginButton = () => {
   useEffect(() => {
     if (user?.id) {
       const params = {
-        privy_id: user.id,
+        privy_id: user.id
       };
 
       (async () => {
         await fetch("/api/users", {
           method: "POST",
-          body: JSON.stringify(params),
+          body: JSON.stringify(params)
         });
       })();
     }

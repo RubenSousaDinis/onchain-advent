@@ -1,8 +1,4 @@
-import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { Address, getAddress } from "viem";
-import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
@@ -10,8 +6,12 @@ import {
   CheckCircleIcon,
   ChevronDownIcon,
   DocumentDuplicateIcon,
-  QrCodeIcon,
+  QrCodeIcon
 } from "@heroicons/react/24/outline";
+import { useRef, useState } from "react";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { Address, getAddress } from "viem";
+import { useDisconnect } from "wagmi";
 import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";

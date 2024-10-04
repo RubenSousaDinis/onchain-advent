@@ -17,7 +17,7 @@ const textSizeMap = {
   xl: "text-xl",
   "2xl": "text-2xl",
   "3xl": "text-3xl",
-  "4xl": "text-4xl",
+  "4xl": "text-4xl"
 } as const;
 
 const blockieSizeMap = {
@@ -33,7 +33,7 @@ const blockieSizeMap = {
   "4xl": 17,
   "5xl": 19,
   "6xl": 21,
-  "7xl": 23,
+  "7xl": 23
 } as const;
 
 const copyIconSizeMap = {
@@ -46,7 +46,7 @@ const copyIconSizeMap = {
   xl: "h-[22px] w-[22px]",
   "2xl": "h-6 w-6",
   "3xl": "h-[26px] w-[26px]",
-  "4xl": "h-7 w-7",
+  "4xl": "h-7 w-7"
 } as const;
 
 type SizeMap = typeof textSizeMap | typeof blockieSizeMap;
@@ -78,7 +78,7 @@ export const Address = ({
   disableAddressLink,
   format,
   size = "base",
-  onlyEnsOrAddress = false,
+  onlyEnsOrAddress = false
 }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
@@ -86,16 +86,16 @@ export const Address = ({
     address: checkSumAddress,
     chainId: 1,
     query: {
-      enabled: isAddress(checkSumAddress ?? ""),
-    },
+      enabled: isAddress(checkSumAddress ?? "")
+    }
   });
   const { data: ensAvatar } = useEnsAvatar({
     name: ens ? normalize(ens) : undefined,
     chainId: 1,
     query: {
       enabled: Boolean(ens),
-      gcTime: 30_000,
-    },
+      gcTime: 30_000
+    }
   });
 
   const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
@@ -115,7 +115,7 @@ export const Address = ({
           className="flex-shrink-0 skeleton rounded-full"
           style={{
             width: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
-            height: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
+            height: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]
           }}
         ></div>
         <div className="flex flex-col space-y-1">
