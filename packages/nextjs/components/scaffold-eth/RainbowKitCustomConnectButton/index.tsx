@@ -1,10 +1,11 @@
 "use client";
 
 // @refresh reset
+import { useEffect } from "react";
 import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
-import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
+import { usePrivy } from "@privy-io/react-auth";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
@@ -17,11 +18,30 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
+  const { ready, authenticated, login, user } = usePrivy();
+  // Disable login when Privy is not ready or the user is already authenticated
+  const disableLogin = !ready || (ready && authenticated);
+
+  const walletAddress = user?.wallet?.address;
+
+  useEffect(() => {
+    if (user?.id) {
+      const params = {
+        privy_id: user.id,
+      };
+
+      (async () => {
+        await fetch("/api/users", {
+          method: "POST",
+          body: JSON.stringify(params),
+        });
+      })();
+    }
+  }, [user?.id]);
 
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openConnectModal, mounted }) => {
-        const connected = mounted && account && chain;
+      {({ account }) => {
         const blockExplorerAddressLink = account
           ? getBlockExplorerAddressLink(targetNetwork, account.address)
           : undefined;
@@ -29,35 +49,32 @@ export const RainbowKitCustomConnectButton = () => {
         return (
           <>
             {(() => {
-              if (!connected) {
+              if (!disableLogin) {
                 return (
-                  <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
-                    Connect Wallet
+                  <button className="btn btn-primary btn-sm" onClick={login} type="button">
+                    Login
                   </button>
                 );
               }
 
-              if (chain.unsupported || chain.id !== targetNetwork.id) {
-                return <WrongNetworkDropdown />;
+              if (walletAddress) {
+                return (
+                  <>
+                    <div className="flex flex-col items-center mr-1">
+                      <Balance address={walletAddress as Address} className="min-h-0 h-auto" />
+                      <span className="text-xs" style={{ color: networkColor }}>
+                        {walletAddress}
+                      </span>
+                    </div>
+                    <AddressInfoDropdown
+                      address={walletAddress as Address}
+                      displayName={"wallet"}
+                      blockExplorerAddressLink={blockExplorerAddressLink}
+                    />
+                    <AddressQRCodeModal address={walletAddress as Address} modalId="qrcode-modal" />
+                  </>
+                );
               }
-
-              return (
-                <>
-                  <div className="flex flex-col items-center mr-1">
-                    <Balance address={account.address as Address} className="min-h-0 h-auto" />
-                    <span className="text-xs" style={{ color: networkColor }}>
-                      {chain.name}
-                    </span>
-                  </div>
-                  <AddressInfoDropdown
-                    address={account.address as Address}
-                    displayName={account.displayName}
-                    ensAvatar={account.ensAvatar}
-                    blockExplorerAddressLink={blockExplorerAddressLink}
-                  />
-                  <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" />
-                </>
-              );
             })()}
           </>
         );
