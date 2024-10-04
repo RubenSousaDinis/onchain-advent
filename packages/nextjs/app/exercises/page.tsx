@@ -1,9 +1,14 @@
-import { createClient } from "@/utils/supabase/server";
+"use server";
 
-const Page = async () => {
-  const supabase = createClient();
+import { createSupabaseClient } from "../supabase/server";
+import Link from "next/link";
 
-  const { data: exercises, error } = await supabase.from("notes").select("*");
+export default async function Page() {
+  const supabase = createSupabaseClient();
+
+  const { data: exercises, error } = await supabase.from("exercises").select("*");
+
+  console.debug("exercises", exercises);
 
   if (error) {
     console.error("Error fetching exercises", error);
@@ -13,15 +18,28 @@ const Page = async () => {
       <div>
         <h1>List of Exercises</h1>
         <table>
-          {exercises.map((exercise, index) => {
-            <tr key={index}>
-              <td>{exercise.id}</td>
-            </tr>;
-          })}
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>DATE</th>
+              <th>DESCRIPTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            {exercises.map((exercise, index) => {
+              return (
+                <tr key={index}>
+                  <td>
+                    <Link href={`/exercises/${exercise.id}`}>{exercise.id}</Link>
+                  </td>
+                  <td>{exercise.date}</td>
+                  <td>{exercise.description}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     );
   }
-};
-
-export default Page;
+}
