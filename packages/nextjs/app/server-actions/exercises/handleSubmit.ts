@@ -20,18 +20,19 @@ async function handleFormSubmit(formData: FormData) {
   const exercise = exercises[0];
 
   console.debug("contractAddress", contractAddress, "exerciseId", exerciseId);
-  const abi = [exercise.answer_abi];
+  const abi = [exercise.function_abi];
+  const functionName = abi[0].match(/function (\w+)/)[1];
 
   const provider = new ethers.JsonRpcProvider("http://localhost:8545");
   const contract = new ethers.Contract(contractAddress, abi, provider);
 
-  const response = await contract.answer();
+  const response = await contract[functionName]();
 
   // I need somehow confirm that the function call has done the work
 
   console.debug("response", response);
 
-  const expectedResponse = exercise.answer_expected_return;
+  const expectedResponse = exercise.function_expected_return;
 
   if (expectedResponse === response) {
     redirect("/exercises/success");
