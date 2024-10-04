@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { getAddress } from "viem";
-import { Address } from "viem";
+import { Address, getAddress } from "viem";
 import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
@@ -21,17 +20,11 @@ const allowedNetworks = getTargetNetworks();
 
 type AddressInfoDropdownProps = {
   address: Address;
-  blockExplorerAddressLink: string | undefined;
   displayName: string;
   ensAvatar?: string;
 };
 
-export const AddressInfoDropdown = ({
-  address,
-  ensAvatar,
-  displayName,
-  blockExplorerAddressLink,
-}: AddressInfoDropdownProps) => {
+export const AddressInfoDropdown = ({ address, ensAvatar, displayName }: AddressInfoDropdownProps) => {
   const { disconnect } = useDisconnect();
   const checkSumAddress = getAddress(address);
 
@@ -100,7 +93,7 @@ export const AddressInfoDropdown = ({
               <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
               <a
                 target="_blank"
-                href={blockExplorerAddressLink}
+                href={"https://sepolia.basescan.org/"}
                 rel="noopener noreferrer"
                 className="whitespace-nowrap"
               >

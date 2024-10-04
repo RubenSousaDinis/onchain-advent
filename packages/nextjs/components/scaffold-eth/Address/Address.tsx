@@ -6,8 +6,6 @@ import { Address as AddressType, getAddress, isAddress } from "viem";
 import { normalize } from "viem/ens";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
-import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 const textSizeMap = {
   "3xs": "text-[10px]",
@@ -84,8 +82,6 @@ export const Address = ({
 }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
-  const { targetNetwork } = useTargetNetwork();
-
   const { data: ens, isLoading: isEnsNameLoading } = useEnsName({
     address: checkSumAddress,
     chainId: 1,
@@ -140,7 +136,7 @@ export const Address = ({
     return <span className="text-error">Wrong address</span>;
   }
 
-  const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, checkSumAddress);
+  const blockExplorerAddressLink = "https://sepolia.basescan.org/";
 
   return (
     <div className="flex items-center flex-shrink-0">

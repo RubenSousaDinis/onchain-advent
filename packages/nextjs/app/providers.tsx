@@ -1,9 +1,14 @@
 "use client";
 
 import { PrivyProvider } from "@privy-io/react-auth";
+import { WagmiProvider, createConfig } from "@privy-io/wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 import { base, baseSepolia } from "viem/chains";
-import { WagmiProvider, createConfig, http } from "wagmi";
+import { http } from "wagmi";
+import { Footer } from "~~/components/Footer";
+import { Header } from "~~/components/Header";
+import { ThemeProvider } from "~~/components/ThemeProvider";
 
 export const wagmiConfig = createConfig({
   chains: [base, baseSepolia],
@@ -17,25 +22,34 @@ const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <PrivyProvider
-      appId="cm1uxrccv019j8fycxvej61ov"
-      config={{
-        // Customize Privy's appearance in your app
-        appearance: {
-          theme: "light",
-          accentColor: "#676FFF",
-          logo: "https://your-logo-url",
-        },
-        embeddedWallets: {
-          createOnLogin: "all-users",
-        },
-        defaultChain: baseSepolia,
-        supportedChains: [base, baseSepolia],
-      }}
-    >
-      <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>
-      </QueryClientProvider>
-    </PrivyProvider>
+    <ThemeProvider enableSystem>
+      <PrivyProvider
+        appId="cm1uxrccv019j8fycxvej61ov"
+        config={{
+          // Customize Privy's appearance in your app
+          appearance: {
+            theme: "light",
+            accentColor: "#676FFF",
+            logo: "https://your-logo-url",
+          },
+          embeddedWallets: {
+            createOnLogin: "all-users",
+          },
+          defaultChain: baseSepolia,
+          supportedChains: [base, baseSepolia],
+        }}
+      >
+        <QueryClientProvider client={queryClient}>
+          <WagmiProvider config={wagmiConfig}>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="relative flex flex-col flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster />
+          </WagmiProvider>
+        </QueryClientProvider>
+      </PrivyProvider>
+    </ThemeProvider>
   );
 }

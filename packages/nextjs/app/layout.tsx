@@ -1,24 +1,18 @@
-import PrivyProviders from "./providers";
+import Providers from "./providers";
 import "@rainbow-me/rainbowkit/styles.css";
-import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
-import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
-  title: "Scaffold-ETH 2 App",
-  description: "Built with 🏗 Scaffold-ETH 2",
+  title: "Onchain Advent",
+  description: "Bring your web2 friend onchain and celebrate Christmas by completing the Onchain Advent",
 });
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning>
       <body>
-        <ThemeProvider enableSystem>
-          <PrivyProviders>
-            <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
-          </PrivyProviders>
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
