@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import privyClient from "~~/app/privy/client";
-import { createClient } from "~~/app/supabase/server";
+import { createSupabaseClient } from "~~/app/supabase/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -10,12 +10,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 401 });
   }
 
-  console.log("Body", body);
-  console.log("privyUser", privyUser);
-  // const wallet = body.wallet;
-
-  const supabase = createClient();
-  const { data, error } = await supabase.from("users").select("*").eq("privy_id", privyUser.id);
+  const supabase = createSupabaseClient();
+  const { data, error } = await supabase.from("users").select().eq("privy_id", privyUser.id).maybeSingle();
 
   if (error) {
     return NextResponse.json({ error: error.message });
@@ -32,6 +28,7 @@ export async function POST(request: NextRequest) {
   }
   const wallet = embeddedWallet.address.toLowerCase();
 
+  // TODO: call talent API to fetch data
   const response = await supabase.from("users").insert({ privy_id: privyUser.id, wallet }).select();
 
   if (response.error) {
