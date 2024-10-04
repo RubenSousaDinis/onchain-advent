@@ -25,10 +25,9 @@ export const RainbowKitCustomConnectButton = () => {
   const walletAddress = user?.wallet?.address;
 
   useEffect(() => {
-    if (user && walletAddress) {
+    if (user) {
       const params = {
         privy_id: user.id,
-        wallet: walletAddress,
       };
 
       (async () => {
@@ -38,7 +37,7 @@ export const RainbowKitCustomConnectButton = () => {
         });
       })();
     }
-  }, [user, walletAddress]);
+  }, [user?.id]);
 
   return (
     <ConnectButton.Custom>
