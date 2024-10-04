@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   // const wallet = body.wallet;
 
   const supabase = createClient();
-  const { data, error } = await supabase.from("users").select().eq("privy_id", privyUser.id);
+  const { data, error } = await supabase.from("users").select("*").eq("privy_id", privyUser.id);
 
   if (error) {
     return NextResponse.json({ error: error.message });
