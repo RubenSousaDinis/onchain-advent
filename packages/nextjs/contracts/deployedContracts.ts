@@ -6,6 +6,328 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
+    RewardsContract: {
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_owner",
+              type: "address"
+            }
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor"
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "claimant",
+              type: "address"
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "exerciseId",
+              type: "uint256"
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256"
+            }
+          ],
+          name: "RewardClaimed",
+          type: "event"
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sponsor",
+              type: "address"
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256"
+            }
+          ],
+          name: "RewardClaimed",
+          type: "event"
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "exerciseId",
+              type: "uint256"
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256"
+            }
+          ],
+          name: "RewardSet",
+          type: "event"
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sponsor",
+              type: "address"
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256"
+            }
+          ],
+          name: "Sponsored",
+          type: "event"
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "exerciseId",
+              type: "uint256"
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "wallet",
+              type: "address"
+            }
+          ],
+          name: "Whitelisted",
+          type: "event"
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "exerciseId",
+              type: "uint256"
+            }
+          ],
+          name: "claimReward",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address"
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          name: "claimedRewards",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          name: "exerciseRewardClaimers",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          name: "exerciseRewardPool",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          inputs: [],
+          name: "maxClaimersPerExercise",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          inputs: [],
+          name: "owner",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "exerciseId",
+              type: "uint256"
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256"
+            }
+          ],
+          name: "setReward",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          inputs: [],
+          name: "sponsor",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function"
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address"
+            }
+          ],
+          name: "sponsorships",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          inputs: [],
+          name: "totalSponsorships",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "exerciseId",
+              type: "uint256"
+            },
+            {
+              internalType: "address",
+              name: "wallet",
+              type: "address"
+            }
+          ],
+          name: "whitelistWallet",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256"
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address"
+            }
+          ],
+          name: "whitelistedRewardsAddresses",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool"
+            }
+          ],
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          stateMutability: "payable",
+          type: "receive"
+        }
+      ],
+      inheritedFunctions: {}
+    },
     YourContract: {
       address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
