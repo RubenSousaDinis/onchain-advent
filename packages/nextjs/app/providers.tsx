@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import { base, baseSepolia } from "viem/chains";
 import { http } from "wagmi";
-import { Footer } from "~~/components/Footer";
 import { Header } from "~~/components/Header";
 import { ThemeProvider } from "~~/components/ThemeProvider";
 
@@ -43,8 +42,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           <WagmiProvider config={wagmiConfig}>
             <div className="flex flex-col min-h-screen">
               <Header />
-              <main className="relative flex flex-col flex-1">{children}</main>
-              <Footer />
+              <main className="container mx-auto mt-6">{children}</main>
             </div>
             <Toaster />
           </WagmiProvider>

@@ -1,7 +1,6 @@
 "use client";
 
 // @refresh reset
-import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { usePrivy } from "@privy-io/react-auth";
@@ -47,10 +46,6 @@ export const LoginButton = () => {
         if (walletAddress) {
           return (
             <>
-              <div className="flex flex-col items-center mr-1">
-                <Balance address={walletAddress as Address} className="min-h-0 h-auto" />
-                <span className="text-xs">{walletAddress}</span>
-              </div>
               <AddressInfoDropdown address={walletAddress as Address} displayName={"wallet"} />
               <AddressQRCodeModal address={walletAddress as Address} modalId="qrcode-modal" />
             </>

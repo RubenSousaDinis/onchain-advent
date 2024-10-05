@@ -18,6 +18,26 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Home",
     href: "/"
+  },
+  {
+    label: "Calendar",
+    href: "/exercises"
+  },
+  {
+    label: "Leaderboard",
+    href: "/leaderboard"
+  },
+  {
+    label: "Rewards",
+    href: "/rewards"
+  },
+  {
+    label: "Sponsors",
+    href: "/sponsors"
+  },
+  {
+    label: "FAQ",
+    href: "/faq"
   }
 ];
 
@@ -29,13 +49,13 @@ export const HeaderMenuLinks = () => {
       {menuLinks.map(({ label, href, icon }) => {
         const isActive = pathname === href;
         return (
-          <li key={href}>
+          <li key={href} className={"mx-4"}>
             <Link
               href={href}
               passHref
               className={`${
                 isActive ? "bg-secondary shadow-md" : ""
-              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
+              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-5 text-base rounded-full gap-4 grid grid-flow-col`}
             >
               {icon}
               <span>{label}</span>
@@ -88,11 +108,13 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">Onchain Advent</span>
-            <span className="text-xs">Bring your web2 friend onchain this Christmas</span>
+            <span className="font-bold leading-tight text-lg">Onchain Advent</span>
+            <span className="text-sm">Bring your web2 friend onchain this Christmas</span>
           </div>
         </Link>
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
+      </div>
+      <div className="navbar-center">
+        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-2 gap-2">
           <HeaderMenuLinks />
         </ul>
       </div>
