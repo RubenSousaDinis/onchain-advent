@@ -8,3 +8,4 @@ export const PRIVY_APP_ID = getEnvVariable("NEXT_PRIVY_APP_ID");
 export const PRIVY_SECRET = getEnvVariable("NEXT_PRIVY_SECRET");
 export const SUPABASE_URL = getEnvVariable("NEXT_SUPABASE_URL");
 export const SUPABASE_ANON_KEY = getEnvVariable("NEXT_SUPABASE_ANON_KEY");
+export const ENV = getEnvVariable("ENV", "development");
