@@ -6,7 +6,8 @@ import {
   CheckCircleIcon,
   ChevronDownIcon,
   DocumentDuplicateIcon,
-  QrCodeIcon
+  QrCodeIcon,
+  WalletIcon
 } from "@heroicons/react/24/outline";
 import { usePrivy } from "@privy-io/react-auth";
 import { useRef, useState } from "react";
@@ -25,7 +26,7 @@ type AddressInfoDropdownProps = {
 };
 
 export const AddressInfoDropdown = ({ address, ensAvatar, displayName }: AddressInfoDropdownProps) => {
-  const { logout } = usePrivy();
+  const { logout, exportWallet } = usePrivy();
   const checkSumAddress = getAddress(address);
 
   const [addressCopied, setAddressCopied] = useState(false);
@@ -114,6 +115,15 @@ export const AddressInfoDropdown = ({ address, ensAvatar, displayName }: Address
               </button>
             </li>
           ) : null}
+          <li className={selectingNetwork ? "hidden" : ""}>
+            <button
+              className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
+              type="button"
+              onClick={exportWallet}
+            >
+              <WalletIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span className="whitespace-nowrap">Export Wallet</span>
+            </button>
+          </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             <button className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3" type="button" onClick={logout}>
               <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
