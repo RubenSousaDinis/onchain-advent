@@ -1,4 +1,3 @@
-import { NetworkOptions } from "./NetworkOptions";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
@@ -8,13 +7,14 @@ import {
   DocumentDuplicateIcon,
   QrCodeIcon
 } from "@heroicons/react/24/outline";
+import { usePrivy } from "@privy-io/react-auth";
 import { useRef, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Address, getAddress } from "viem";
-import { useDisconnect } from "wagmi";
 import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
+import { NetworkOptions } from "./NetworkOptions";
 
 const allowedNetworks = getTargetNetworks();
 
@@ -25,7 +25,7 @@ type AddressInfoDropdownProps = {
 };
 
 export const AddressInfoDropdown = ({ address, ensAvatar, displayName }: AddressInfoDropdownProps) => {
-  const { disconnect } = useDisconnect();
+  const { logout } = usePrivy();
   const checkSumAddress = getAddress(address);
 
   const [addressCopied, setAddressCopied] = useState(false);
@@ -118,7 +118,7 @@ export const AddressInfoDropdown = ({ address, ensAvatar, displayName }: Address
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
-              onClick={() => disconnect()}
+              onClick={() => logout()}
             >
               <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
             </button>

@@ -4,7 +4,7 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import { WagmiProvider, createConfig } from "@privy-io/wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
-import { base, baseSepolia } from "viem/chains";
+import { base, baseSepolia, hardhat } from "viem/chains";
 import { http } from "wagmi";
 import { Header } from "~~/components/Header";
 import { ThemeProvider } from "~~/components/ThemeProvider";
@@ -34,8 +34,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           embeddedWallets: {
             createOnLogin: "all-users"
           },
-          defaultChain: baseSepolia,
-          supportedChains: [base, baseSepolia]
+          defaultChain: process.env.NODE_ENV === "production" ? baseSepolia : hardhat,
+          supportedChains: [base, baseSepolia, hardhat]
         }}
       >
         <QueryClientProvider client={queryClient}>

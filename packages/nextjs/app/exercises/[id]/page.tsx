@@ -1,6 +1,7 @@
 "use client";
 
 import { usePrivy } from "@privy-io/react-auth";
+import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { type IExercise } from "~~/types/IExercise";
 
@@ -13,45 +14,51 @@ export default function Exercise({ params }: { params: { id: string } }) {
   const { authenticated } = usePrivy();
 
   const onSubmit = () => {
+    if (!exercise) {
+      return;
+    }
+
     console.debug("Submitting.............");
+
     // Clear previous messages
     setErrorMessage("");
     setSuccessSubmissionMessage("");
 
-    const data = {
-      contractAddress
-    };
+    console.debug("contractAddress", contractAddress, "exerciseId", exerciseId);
+
+    const abi = [exercise.function_abi];
+    const functionName = abi[0].match(/function (\w+)/)[1];
 
     (async () => {
       try {
-        const result = await fetch(`/api/exercises/${exerciseId}/submissions`, {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        });
+        // Connect to the MetaMask EIP-1193 object. This is a standard
+        // protocol that allows Ethers access to make all read-only
+        // requests through MetaMask.
+        const provider = new ethers.BrowserProvider(window.ethereum);
 
-        console.debug("result", result);
+        // It also provides an opportunity to request access to write
+        // operations, which will be performed by the private key
+        // that MetaMask manages for the user.
+        const signer = await provider.getSigner();
 
-        const body = await result.json();
+        const contract = new ethers.Contract(contractAddress, abi, provider);
 
-        console.debug("body", body);
+        const response = await contract[functionName]();
 
-        if (result.ok) {
-          if (body.submission === "success") {
-            setSuccessSubmissionMessage("Well Done! You have successfully completed this challenge!");
-          }
-          if (body.submission === "failure") {
-            setErrorMessage("Unfortunately, your solution was not correct. Do you want to try again?");
-          }
+        // I need somehow confirm that the function call has done the work
+
+        console.debug("response", response);
+
+        const expectedResponse = exercise.function_expected_return;
+
+        if (expectedResponse === response) {
+          setSuccessSubmissionMessage("Your answer is correct");
         } else {
-          setErrorMessage(`Error processing your submission: ${body.error}`);
+          setErrorMessage("Your answer is not correct");
         }
       } catch (e) {
-        console.error("error from submission", e);
-        setErrorMessage(`Error processing your submission: ${e}`);
+        console.error("error", e);
+        return setErrorMessage(`Error ${e}`);
       }
     })();
   };
