@@ -7,10 +7,10 @@ import { type IExercise } from "~~/types/IExercise";
 export default function Exercise({ params }: { params: { id: string } }) {
   const exerciseId: number = parseInt(params.id) || 0;
   const [exercise, setExercise] = useState<IExercise>();
-  const [contractAddress, setContractAddress] = useState("");
+  const [transactionHash, setTransactionHash] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successSubmissionMessage, setSuccessSubmissionMessage] = useState("");
-  const { authenticated } = usePrivy();
+  const { authenticated, user } = usePrivy();
 
   const onSubmit = () => {
     console.debug("Submitting.............");
@@ -19,7 +19,8 @@ export default function Exercise({ params }: { params: { id: string } }) {
     setSuccessSubmissionMessage("");
 
     const data = {
-      contractAddress
+      transactionHash,
+      privyId: user?.id
     };
 
     (async () => {
@@ -56,8 +57,8 @@ export default function Exercise({ params }: { params: { id: string } }) {
     })();
   };
 
-  const onContractAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContractAddress(event.target.value);
+  const onTransactionHashChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTransactionHash(event.target.value);
   };
 
   useEffect(() => {
@@ -96,17 +97,17 @@ export default function Exercise({ params }: { params: { id: string } }) {
           </tbody>
         </table>
 
-        <h1>Submit your solution by giving the address to your deployed contract</h1>
+        <h1>Submit your solution by giving the transaction hash that deployed your contract</h1>
 
         <div>
-          <label htmlFor="contactAddress">Contract address:</label>
+          <label htmlFor="transactionHash">Transaction hash:</label>
           <input
             type="text"
-            id="contractAddress"
-            name="contractAddress"
+            id="transactionHash"
+            name="transactionHash"
             required
-            value={contractAddress}
-            onChange={onContractAddressChange}
+            value={transactionHash}
+            onChange={onTransactionHashChange}
           />
         </div>
         <button onClick={onSubmit} disabled={!authenticated}>

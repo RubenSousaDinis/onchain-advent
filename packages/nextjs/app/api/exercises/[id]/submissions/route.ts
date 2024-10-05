@@ -6,12 +6,23 @@ import { DEPLOYED_CONTRACTS_JSON_RPC_URL } from "~~/constants";
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   const body = await request.json();
 
-  const contractAddress = body.contractAddress;
+  const transactionHash = body.transactionHash;
+  const privyUserId = body.privyId;
   const exerciseId = params.id;
 
-  console.debug("contractAddress", contractAddress, "exerciseId", exerciseId);
-
   const supabase = createSupabaseClient();
+  const { data: user, error: userError } = await supabase
+    .from("users")
+    .select()
+    .eq("privy_id", privyUserId)
+    .maybeSingle();
+
+  if (userError) {
+    console.error("error", userError);
+    return new Response(`Error: ${userError}`, { status: 401 });
+  }
+
+  console.debug("transactionHash", transactionHash, "exerciseId", exerciseId);
 
   const { data: exercise, error } = await supabase.from("exercises").select("*").eq("id", exerciseId).maybeSingle();
 
@@ -26,7 +37,23 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
   try {
     const provider = new ethers.JsonRpcProvider(DEPLOYED_CONTRACTS_JSON_RPC_URL);
-    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const receipt = await provider.getTransactionReceipt(transactionHash);
+
+    if (!receipt) {
+      return NextResponse.json({ submission: "Transaction hash does not exist", status: 400 });
+    }
+    const contractAddress = receipt.contractAddress;
+
+    if (!contractAddress) {
+      return NextResponse.json({ submission: "Transaction hash does not deploy a smart contract", status: 400 });
+    }
+
+    if (receipt.from != user.wallet) {
+      return NextResponse.json({ submission: "Transaction hash must be your privy wallet", status: 400 });
+    }
+
+    // TODO validate privy wallet
+    const contract = new ethers.Contract(contractAddress as string, abi, provider);
 
     const response = await contract[functionName]();
 
