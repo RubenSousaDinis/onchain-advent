@@ -1,50 +1,48 @@
 import type { Metadata } from "next";
+import { BASE_URL } from "~~/constants";
 
-const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : `http://localhost:${process.env.PORT || 3000}`;
 const titleTemplate = "%s | Scaffold-ETH 2";
 
 export const getMetadata = ({
   title,
   description,
-  imageRelativePath = "/thumbnail.jpg",
+  imageRelativePath = "/thumbnail.jpg"
 }: {
   title: string;
   description: string;
   imageRelativePath?: string;
 }): Metadata => {
-  const imageUrl = `${baseUrl}${imageRelativePath}`;
+  const imageUrl = `${BASE_URL}${imageRelativePath}`;
 
   return {
-    metadataBase: new URL(baseUrl),
+    metadataBase: new URL(BASE_URL),
     title: {
       default: title,
-      template: titleTemplate,
+      template: titleTemplate
     },
     description: description,
     openGraph: {
       title: {
         default: title,
-        template: titleTemplate,
+        template: titleTemplate
       },
       description: description,
       images: [
         {
-          url: imageUrl,
-        },
-      ],
+          url: imageUrl
+        }
+      ]
     },
     twitter: {
       title: {
         default: title,
-        template: titleTemplate,
+        template: titleTemplate
       },
       description: description,
-      images: [imageUrl],
+      images: [imageUrl]
     },
     icons: {
-      icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
-    },
+      icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }]
+    }
   };
 };

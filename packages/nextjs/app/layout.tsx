@@ -4,11 +4,22 @@ import { fetchMetadata } from "frames.js/next";
 import { BASE_URL } from "~~/constants";
 import "~~/styles/globals.css";
 
+// export const metadata = getMetadata({
+//   title: "Onchain Advent",
+//   description: "Bring your web2 friend onchain and celebrate Christmas by completing the Onchain Advent"
+// });
+
 export async function generateMetadata() {
+  const other = await fetchMetadata(new URL("/frames", BASE_URL));
+  const main = {
+    title: "Exercise of the Day - Onchain Advent"
+  };
+
+  console.debug("other", other);
+
   return {
-    title: "Exercise of the Day - Onchain Advent",
-    // provide a full URL to your /frames endpoint
-    other: await fetchMetadata(new URL("/frames", BASE_URL))
+    ...main,
+    other
   };
 }
 
