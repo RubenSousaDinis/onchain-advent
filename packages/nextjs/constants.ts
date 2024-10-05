@@ -1,5 +1,6 @@
 import { getEnvVariable } from "./utils/env";
 
+export const BASE_URL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
 export const DEPLOYED_CONTRACTS_JSON_RPC_URL = getEnvVariable(
   "DEPLOYED_CONTRACTS_JSON_RPC_URL",
   "https://base-sepolia-rpc.publicnode.com"
