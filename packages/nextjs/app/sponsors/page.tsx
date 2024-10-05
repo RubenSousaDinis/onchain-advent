@@ -8,14 +8,31 @@ import toast from "react-hot-toast";
 import { useWriteContract } from "wagmi";
 import { Leaderboard } from "~~/components/Leaderboard";
 import RewardsContractAbi from "~~/contracts/rewardsContractAbi.json";
+import { ISponsor } from "~~/types/ISponsor";
 
 const REWARD_CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 export default function Page() {
   const [amount, setAmount] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [sponsors, setSponsors] = useState<ISponsor[]>([]);
   const { data: hash, writeContract, error } = useWriteContract();
   const { authenticated } = usePrivy();
+
+  useEffect(() => {
+    (async () => {
+      const result = await fetch("/api/sponsors/", {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        }
+      });
+
+      const { data } = await result.json();
+      console.log("sponsors", data);
+      setSponsors(data);
+    })();
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -27,8 +44,39 @@ export default function Page() {
   useEffect(() => {
     if (hash) {
       toast.success(hash);
-      setSubmitted(true);
-      setAmount("");
+
+      const data = {
+        transactionHash: hash
+      };
+      (async () => {
+        try {
+          const result = await fetch("/api/sponsors", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            }
+          });
+
+          console.debug("result", result);
+
+          const body = await result.json();
+
+          console.debug("body", body);
+
+          if (result.ok && body.sponsor) {
+            toast.success("Well Done! You have successfully completed this challenge!");
+            setSubmitted(true);
+            setAmount("");
+          } else {
+            toast.error(body.error);
+          }
+        } catch (e) {
+          toast.error("Something went wrong");
+          console.error("error from submission", e);
+        }
+      })();
     }
   }, [hash]);
 
@@ -51,7 +99,7 @@ export default function Page() {
         <div className="alert alert-success my-6">
           <label>Thank you for your sponsorship! You are helping web2 developers to enter the onchain world.</label>
         </div>
-        <Leaderboard />
+        <Leaderboard sponsors={sponsors} />
       </>
     );
   }
@@ -60,7 +108,7 @@ export default function Page() {
     <>
       <div className="card bg-blue-800 shadow-xl mb-6">
         <div className="card-body gap-1">
-          <h2 className="card-title text-xl mb-4">Become a Onchain Advent</h2>
+          <h2 className="card-title text-xl mb-4">Become a Onchain Advent Sponsor</h2>
           <p className="text-lg">
             Support the next generation of blockchain developers and gain visibility in the BUILD community. Your
             sponsorship helps us create more challenges, improve our platform, and nurture talent.
@@ -87,7 +135,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="card bg-blue-800 shadow-xl">
+      <div className="card bg-blue-800 shadow-xl mb-6">
         <div className="card-body">
           <h3 className="card-title text-lg mb-4">Sponsor Onchain Advent</h3>
           <div className="form-control">
@@ -115,6 +163,8 @@ export default function Page() {
           )}
         </div>
       </div>
+      <h2 className="card-title text-xl mb-4">Sponsors</h2>
+      <Leaderboard sponsors={sponsors} />
     </>
   );
 }

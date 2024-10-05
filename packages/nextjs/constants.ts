@@ -12,3 +12,4 @@ export const SUPABASE_URL = getEnvVariable("NEXT_SUPABASE_URL");
 export const SUPABASE_ANON_KEY = getEnvVariable("NEXT_SUPABASE_ANON_KEY");
 export const ENV = getEnvVariable("ENV", "development");
 export const REWARDS_CONTRACT_ADDRESS = getEnvVariable("NEXT_PUBLIC_REWARDS_CONTRACT_ADDRESS");
+export const TALENT_PROTOCOL_API_KEY = getEnvVariable("TALENT_PROTOCOL_API_KEY");

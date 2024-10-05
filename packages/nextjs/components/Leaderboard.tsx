@@ -3,8 +3,13 @@
  */
 import { Link } from "lucide-react";
 import Image from "next/image";
+import { ISponsor } from "~~/types/ISponsor";
 
-export const Leaderboard = () => {
+interface LeaderboardProps {
+  sponsors: ISponsor[];
+}
+
+export const Leaderboard = ({ sponsors }: LeaderboardProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -23,10 +28,7 @@ export const Leaderboard = () => {
               <div className="flex items-center gap-3">
                 <div className="avatar">
                   <div className="mask mask-squircle h-12 w-12">
-                    <Image
-                      src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                      alt="Avatar Tailwind CSS Component"
-                    />
+                    <Image src="" alt="Avatar Tailwind CSS Component" />
                   </div>
                 </div>
                 <div>
@@ -38,13 +40,45 @@ export const Leaderboard = () => {
             <td>
               <div className="badge badge-accent">2 ETH</div>
             </td>
-            <td>Zemlak, Daniel and Leannon</td>
+            <td>Helping Builders</td>
             <th>
               <button className="btn btn-ghost">
                 <Link className="w-5 h-5 text-blue-500" />
               </button>
             </th>
           </tr>
+          {sponsors.map(sponsor => (
+            <tr key={sponsor.wallet}>
+              <td>
+                <div className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
+                      <Image src={sponsor.profile_picture_url} alt="Avatar Tailwind CSS Component" />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">{sponsor.name || sponsor.wallet}</div>
+                    <div className="text-sm opacity-50">{sponsor.builder_score}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="badge badge-accent">{sponsor.total_amount}</div>
+              </td>
+              <td>{sponsor.bio}</td>
+              <th>
+                {sponsor.talent_passport_id && (
+                  <button className="btn btn-ghost">
+                    <Link
+                      className="w-5 h-5 text-blue-500"
+                      href={`https://passport.talentprotocol.com/profile/${sponsor.talent_passport_id}`}
+                      target="_blank"
+                    />
+                  </button>
+                )}
+              </th>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
