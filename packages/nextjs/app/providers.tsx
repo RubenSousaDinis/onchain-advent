@@ -21,7 +21,7 @@ const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider enableSystem>
+    <ThemeProvider forcedTheme="dark">
       <PrivyProvider
         appId="cm1uxrccv019j8fycxvej61ov"
         config={{

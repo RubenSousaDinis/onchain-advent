@@ -5,12 +5,12 @@ import { ethers } from "ethers";
 import { Award, Users, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Leaderboard } from "~~/components/Leaderboard";
 import RewardsContractAbi from "~~/contracts/rewardsContractAbi.json";
 import { ISponsor } from "~~/types/ISponsor";
 
-const REWARD_CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+const REWARDS_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_REWARDS_CONTRACT_ADDRESS;
 
 export default function Page() {
   const [amount, setAmount] = useState("");
@@ -18,6 +18,10 @@ export default function Page() {
   const [sponsors, setSponsors] = useState<ISponsor[]>([]);
   const { data: hash, writeContract, error } = useWriteContract();
   const { authenticated } = usePrivy();
+  const { isLoading, isError, isSuccess } = useWaitForTransactionReceipt({
+    confirmations: 5,
+    hash: hash // Transaction hash we want to track
+  });
 
   useEffect(() => {
     (async () => {
@@ -42,7 +46,7 @@ export default function Page() {
   }, [error]);
 
   useEffect(() => {
-    if (hash) {
+    if (hash && isSuccess) {
       toast.success(hash);
 
       const data = {
@@ -65,7 +69,7 @@ export default function Page() {
 
           console.debug("body", body);
 
-          if (result.ok && body.sponsor) {
+          if (result.ok && body.data) {
             toast.success("Well Done! You have successfully completed this challenge!");
             setSubmitted(true);
             setAmount("");
@@ -77,16 +81,21 @@ export default function Page() {
           console.error("error from submission", e);
         }
       })();
+    } else if (hash && isError) {
+      console.error("Transaction failed");
     }
-  }, [hash]);
+  }, [hash, isSuccess, isError]);
 
   const handleSubmit = () => {
     if (Number(amount) < 0.01) {
       toast.error("We require a minimum of 0.01 ETH to become a sponsor");
       return;
     }
+
+    console.debug("REWARDS_CONTRACT_ADDRESS", REWARDS_CONTRACT_ADDRESS);
+
     writeContract({
-      address: REWARD_CONTRACT_ADDRESS,
+      address: REWARDS_CONTRACT_ADDRESS || "",
       abi: RewardsContractAbi,
       functionName: "sponsor",
       value: ethers.parseUnits(amount.toString(), "ether")
@@ -103,6 +112,10 @@ export default function Page() {
       </>
     );
   }
+
+  // if (isLoading) {
+  // return <span className="loading loading-bars loading-lg"></span>;
+  // }
 
   return (
     <>
@@ -145,20 +158,24 @@ export default function Page() {
             <input
               type="number"
               placeholder="1 ETH"
-              className="input input-bordered w-full text-blue-900"
+              className="input input-bordered w-full text-white"
               value={amount}
               onChange={e => setAmount(e.target.value)}
               required
             />
           </div>
           <div className="mt-6">
-            <button className="btn btn-primary w-full" onClick={handleSubmit} disabled={!authenticated}>
-              {authenticated ? "Become a Sponsor" : "Login to Sponsor"}
+            <button
+              className="btn btn-primary w-full text-white"
+              onClick={handleSubmit}
+              disabled={!authenticated || isLoading}
+            >
+              {authenticated ? (isLoading ? "...transaction in progress..." : "Become a Sponsor") : "Login to Sponsor"}
             </button>
           </div>
           {!authenticated && (
             <p className="mb-4 text-sm">
-              You may also transfer ETH on Base to {REWARD_CONTRACT_ADDRESS} in order to sponsor
+              You may also transfer ETH on Base to {REWARDS_CONTRACT_ADDRESS} in order to sponsor
             </p>
           )}
         </div>

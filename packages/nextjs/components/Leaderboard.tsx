@@ -53,7 +53,11 @@ export const Leaderboard = ({ sponsors }: LeaderboardProps) => {
                 <div className="flex items-center gap-3">
                   <div className="avatar">
                     <div className="mask mask-squircle h-12 w-12">
-                      <Image src={sponsor.profile_picture_url} alt="Avatar Tailwind CSS Component" />
+                      <div className="avatar">
+                        <div className="w-24 rounded-full">
+                          <img src={sponsor.profile_picture_url} alt="Avatar Tailwind CSS Component" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div>
@@ -63,7 +67,7 @@ export const Leaderboard = ({ sponsors }: LeaderboardProps) => {
                 </div>
               </td>
               <td>
-                <div className="badge badge-accent">{sponsor.total_amount}</div>
+                <div className="badge badge-accent">{sponsor.total_amount} ETH</div>
               </td>
               <td>{sponsor.bio}</td>
               <th>
