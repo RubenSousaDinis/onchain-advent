@@ -32,14 +32,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             logo: "https://your-logo-url"
           },
           embeddedWallets: {
-            createOnLogin: "all-users"
+            createOnLogin: "users-without-wallets"
           },
           defaultChain: baseSepolia,
           supportedChains: [base, baseSepolia]
         }}
       >
         <QueryClientProvider client={queryClient}>
-          <WagmiProvider config={wagmiConfig}>
+          <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
             <div className="flex flex-col min-h-screen">
               <Header />
               <main className="container mx-auto mt-6">{children}</main>

@@ -4,13 +4,6 @@ import { fetchMetadata } from "frames.js/next";
 import { BASE_URL } from "~~/constants";
 import "~~/styles/globals.css";
 
-// import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-
-// export const metadata = getMetadata({
-//   title: "Onchain Advent",
-//   description: "Bring your web2 friend onchain and celebrate Christmas by completing the Onchain Advent"
-// });
-
 export async function generateMetadata() {
   return {
     title: "Exercise of the Day - Onchain Advent",
