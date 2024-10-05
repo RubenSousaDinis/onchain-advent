@@ -4,7 +4,6 @@
  * Site footer
  */
 import { Link } from "lucide-react";
-import Image from "next/image";
 import { ISponsor } from "~~/types/ISponsor";
 
 interface LeaderboardProps {
@@ -25,30 +24,6 @@ export const Leaderboard = ({ sponsors }: LeaderboardProps) => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <div className="flex items-center gap-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle h-12 w-12">
-                    <Image src="" alt="Avatar Tailwind CSS Component" />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-bold">Hart Hagerty</div>
-                  <div className="text-sm opacity-50">100</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className="badge badge-accent">2 ETH</div>
-            </td>
-            <td>Helping Builders</td>
-            <th>
-              <button className="btn btn-ghost">
-                <Link className="w-5 h-5 text-blue-500" />
-              </button>
-            </th>
-          </tr>
           {sponsors.map(sponsor => (
             <tr key={sponsor.wallet}>
               <td>
