@@ -1,26 +1,27 @@
 "use client";
 
 import { usePrivy } from "@privy-io/react-auth";
+import { CheckCircle, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { type IExercise } from "~~/types/IExercise";
 
 export default function Exercise({ params }: { params: { id: string } }) {
   const exerciseId: number = parseInt(params.id) || 0;
   const [exercise, setExercise] = useState<IExercise>();
   const [transactionHash, setTransactionHash] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successSubmissionMessage, setSuccessSubmissionMessage] = useState("");
   const { authenticated, user } = usePrivy();
 
+  const endDate = exercise?.date ? new Date(exercise.date) : null;
+  endDate?.setUTCHours(23, 59, 59, 999);
+
   const onSubmit = () => {
-    console.debug("Submitting.............");
-    // Clear previous messages
-    setErrorMessage("");
-    setSuccessSubmissionMessage("");
+    if (!exercise || !user) {
+      return;
+    }
 
     const data = {
-      transactionHash,
-      privyId: user?.id
+      transactionHash
     };
 
     (async () => {
@@ -30,7 +31,8 @@ export default function Exercise({ params }: { params: { id: string } }) {
           body: JSON.stringify(data),
           headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-privy-user-id": user.id
           }
         });
 
@@ -40,19 +42,14 @@ export default function Exercise({ params }: { params: { id: string } }) {
 
         console.debug("body", body);
 
-        if (result.ok) {
-          if (body.submission === "success") {
-            setSuccessSubmissionMessage("Well Done! You have successfully completed this challenge!");
-          }
-          if (body.submission === "failure") {
-            setErrorMessage("Unfortunately, your solution was not correct. Do you want to try again?");
-          }
+        if (result.ok && body.submission) {
+          toast.success("Well Done! You have successfully completed this challenge!");
         } else {
-          setErrorMessage(`Error processing your submission: ${body.error}`);
+          toast.error(body.error);
         }
       } catch (e) {
+        toast.error("Something went wrong");
         console.error("error from submission", e);
-        setErrorMessage(`Error processing your submission: ${e}`);
       }
     })();
   };
@@ -69,57 +66,82 @@ export default function Exercise({ params }: { params: { id: string } }) {
           Accept: "application/json"
         }
       });
-      const { data: exercise } = await result.json();
-      console.debug("exercise", exercise);
+
+      const { exercise } = await result.json();
       setExercise(exercise);
     })();
   }, [exerciseId]);
 
   if (!exercise) {
-    return <div>Exercise ...</div>;
+    return <span className="loading loading-bars loading-lg"></span>;
   } else {
     return (
-      <div>
-        <table>
-          <tbody>
-            <tr>
-              <th>ID</th>
-              <td>{exercise.id}</td>
-            </tr>
-            <tr>
-              <th>Date</th>
-              <td>{exercise.date}</td>
-            </tr>
-            <tr>
-              <th>Description</th>
-              <td>{exercise.description}</td>
-            </tr>
-          </tbody>
-        </table>
+      <>
+        <div className="card bg-blue-800 shadow-xl mb-6">
+          <div className="card-body">
+            <h2 className="card-title text-xl mb-4">
+              {new Date(exercise.date).toLocaleDateString("en-us", { day: "numeric", month: "long" })}
+            </h2>
+            <p className="mb-4">{exercise.description}</p>
+            <div className="mockup-code mb-4">
+              <pre>
+                <code>
+                  {`contract Inefficient {
+                    uint256[] public numbers;
+                    
+                    function addNumber(uint256 _number) public {
+                        numbers.push(_number);
+                    }
+                    
+                    function sum() public view returns (uint256) {
+                        uint256 total = 0;
+                        for (uint256 i = 0; i < numbers.length; i++) {
+                            total += numbers[i];
+                        }
+                        return total;
+                    }
+                }`}
+                </code>
+              </pre>
+            </div>
+            <div className="flex items-center gap-4">
+              <Clock className="w-5 h-5" />
+              <span>
+                Complete until <b>{endDate?.toUTCString()} </b> to be eligible for rewards
+              </span>
+            </div>
+          </div>
 
-        <h1>Submit your solution by giving the transaction hash that deployed your contract</h1>
+          <div className="card-body w-full">
+            {exercise.completed ? (
+              <div className={"alert alert-success w-ful mt-6 mx-auto"}>
+                <div className="flex-1">
+                  <CheckCircle className="w-6 h-6 mr-2" />
 
-        <div>
-          <label htmlFor="transactionHash">Transaction hash:</label>
-          <input
-            type="text"
-            id="transactionHash"
-            name="transactionHash"
-            required
-            value={transactionHash}
-            onChange={onTransactionHashChange}
-          />
+                  <label>You have completed this exercise!</label>
+                </div>
+              </div>
+            ) : (
+              <>
+                <h3 className="card-title text-lg mb-4">Your Solution</h3>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="text"
+                    placeholder="Type tour transaction hash here"
+                    className="input w-full max-w-xs"
+                    required
+                    value={transactionHash}
+                    onChange={onTransactionHashChange}
+                  />
+                  <button onClick={onSubmit} disabled={!authenticated} className="btn btn-primary">
+                    Submit Solution
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-        <button onClick={onSubmit} disabled={!authenticated}>
-          Submit
-        </button>
-
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-
-        {!authenticated && <p style={{ color: "red" }}>You have to be logged in to submit your solution.</p>}
-
-        {successSubmissionMessage && <p style={{ color: "green" }}>{successSubmissionMessage}</p>}
-      </div>
+      </>
     );
   }
 }
