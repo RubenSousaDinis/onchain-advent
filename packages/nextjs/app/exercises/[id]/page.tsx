@@ -1,23 +1,30 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import handleFormSubmit from "~~/app/server-actions/exercises/handleSubmit";
-import { createSupabaseClient } from "~~/app/supabase/server";
+import { type IExercise } from "~~/types/IExercise";
 
-export default async function Exercise({ params }: { params: { id: string } }) {
-  const supabase = createSupabaseClient();
+export default function Exercise({ params }: { params: { id: string } }) {
+  const exerciseId: number = parseInt(params.id) || 0;
+  const [exercise, setExercise] = useState<IExercise>();
 
-  const { data: exercises, error } = await supabase.from("exercises").select("*").eq("id", parseInt(params.id));
+  useEffect(() => {
+    (async () => {
+      const result = await fetch(`/api/exercises/${exerciseId}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      const { data: exercise } = await result.json();
+      console.debug("exercise", exercise);
+      setExercise(exercise);
+    })();
+  }, [exerciseId]);
 
-  console.debug("exercises", exercises);
-
-  if (error) {
-    console.error(error);
-    return (
-      <div>
-        <h1>Error: {`${error}`}</h1>
-      </div>
-    );
+  if (!exercise) {
+    return <div>Exercise ...</div>;
   } else {
-    const exercise = exercises[0];
-
     return (
       <div>
         <table>
