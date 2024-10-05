@@ -1,68 +1,120 @@
 "use client";
 
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { usePrivy } from "@privy-io/react-auth";
+import { ethers } from "ethers";
+import { Award, Users, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useWriteContract } from "wagmi";
+import { Leaderboard } from "~~/components/Leaderboard";
+import RewardsContractAbi from "~~/contracts/rewardsContractAbi.json";
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-const faqData: FAQItem[] = [
-  {
-    question: "What is BUILD?",
-    answer:
-      "BUILD is a platform that empowers onchain builders through daily challenges, fostering a community of blockchain developers and enthusiasts."
-  },
-  {
-    question: "How do I participate in daily challenges?",
-    answer:
-      "To participate in daily challenges, log in to your BUILD account and navigate to the Calendar page. Click on the current day's challenge to view and submit your solution."
-  },
-  {
-    question: "Are the challenges suitable for beginners?",
-    answer:
-      "BUILD offers challenges for various skill levels, from beginner to advanced. Each challenge is labeled with its difficulty level, allowing you to choose tasks that match your expertise."
-  },
-  {
-    question: "How are solutions evaluated?",
-    answer:
-      "Solutions are evaluated through a combination of automated testing and peer review. The exact criteria depend on the specific challenge but generally include correctness, efficiency, and code quality."
-  },
-  {
-    question: "What rewards can I earn through BUILD?",
-    answer:
-      "By completing challenges and contributing to the community, you can earn BUILD tokens, NFT badges, and recognition on our leaderboard. These can enhance your profile and open up opportunities in the blockchain ecosystem."
-  },
-  {
-    question: "How can I become a sponsor for BUILD?",
-    answer:
-      "If you're interested in sponsoring BUILD, please reach out to our partnerships team at sponsors@build.example.com. We offer various sponsorship packages that can help you connect with our community of talented blockchain developers."
-  }
-];
+const REWARD_CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 export default function Page() {
-  const [openItems, setOpenItems] = useState<number[]>([]);
+  const [amount, setAmount] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const { data: hash, writeContract, error } = useWriteContract();
+  const { authenticated } = usePrivy();
 
-  const toggleItem = (index: number) => {
-    setOpenItems(prev => (prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]));
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      toast.error("Unable to sponsor, check if you have enough funds");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (hash) {
+      toast.success(hash);
+      setSubmitted(true);
+      setAmount("");
+    }
+  }, [hash]);
+
+  const handleSubmit = () => {
+    if (Number(amount) < 0.01) {
+      toast.error("We require a minimum of 0.01 ETH to become a sponsor");
+      return;
+    }
+    writeContract({
+      address: REWARD_CONTRACT_ADDRESS,
+      abi: RewardsContractAbi,
+      functionName: "sponsor",
+      value: ethers.parseUnits(amount.toString(), "ether")
+    });
   };
 
+  if (submitted) {
+    return (
+      <>
+        <div className="alert alert-success my-6">
+          <label>Thank you for your sponsorship! You are helping web2 developers to enter the onchain world.</label>
+        </div>
+        <Leaderboard />
+      </>
+    );
+  }
+
   return (
-    <div className="bg-blue-700 text-white p-4 font-sans">
-      <div className="space-y-4">
-        {faqData.map((item, index) => (
-          <div key={index} className="card bg-blue-800 shadow-xl">
-            <div className="card-body p-4">
-              <div className="flex justify-between items-center cursor-pointer" onClick={() => toggleItem(index)}>
-                <h2 className="card-title text-lg">{item.question}</h2>
-                {openItems.includes(index) ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-              </div>
-              {openItems.includes(index) && <p className="mt-2 text-blue-200">{item.answer}</p>}
+    <>
+      <div className="card bg-blue-800 shadow-xl mb-6">
+        <div className="card-body gap-1">
+          <h2 className="card-title text-xl mb-4">Become a Onchain Advent</h2>
+          <p className="text-lg">
+            Support the next generation of blockchain developers and gain visibility in the BUILD community. Your
+            sponsorship helps us create more challenges, improve our platform, and nurture talent.
+          </p>
+          <p className="mb-4 text-sm">
+            In case you want to showcase your sponsor we recommend that you sign in with the wallet you have connected
+            to your Talent Passport. If you want to preserve your identity you can fund please user a wallet not linked
+            with any social app.
+          </p>
+          <div className="flex flex-wrap gap-4 mb-4">
+            <div className="flex items-center gap-2">
+              <Award className="w-5 h-5" />
+              <span>Recognition on Leaderboard</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              <span>Access to Top Talent</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="w-5 h-5" />
+              <span>Branded Challenges</span>
             </div>
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+
+      <div className="card bg-blue-800 shadow-xl">
+        <div className="card-body">
+          <h3 className="card-title text-lg mb-4">Sponsor Onchain Advent</h3>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-white">Sponsorship Amount (ETH)</span>
+            </label>
+            <input
+              type="number"
+              placeholder="1 ETH"
+              className="input input-bordered w-full text-blue-900"
+              value={amount}
+              onChange={e => setAmount(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mt-6">
+            <button className="btn btn-primary w-full" onClick={handleSubmit} disabled={!authenticated}>
+              {authenticated ? "Become a Sponsor" : "Login to Sponsor"}
+            </button>
+          </div>
+          {!authenticated && (
+            <p className="mb-4 text-sm">
+              You may also transfer ETH on Base to {REWARD_CONTRACT_ADDRESS} in order to sponsor
+            </p>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
