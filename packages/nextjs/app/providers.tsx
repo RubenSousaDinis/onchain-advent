@@ -1,21 +1,13 @@
 "use client";
 
+import { wagmiConfig } from "./shared/wagmiConfig";
 import { PrivyProvider } from "@privy-io/react-auth";
-import { WagmiProvider, createConfig } from "@privy-io/wagmi";
+import { WagmiProvider } from "@privy-io/wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import { base, baseSepolia } from "viem/chains";
-import { http } from "wagmi";
 import { Header } from "~~/components/Header";
 import { ThemeProvider } from "~~/components/ThemeProvider";
-
-export const wagmiConfig = createConfig({
-  chains: [base, baseSepolia],
-  transports: {
-    [base.id]: http(),
-    [baseSepolia.id]: http()
-  }
-});
 
 const queryClient = new QueryClient();
 

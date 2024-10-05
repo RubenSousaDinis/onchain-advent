@@ -91,8 +91,6 @@ export default function Page() {
       return;
     }
 
-    console.debug("REWARDS_CONTRACT_ADDRESS", REWARDS_CONTRACT_ADDRESS);
-
     writeContract({
       address: REWARDS_CONTRACT_ADDRESS || "",
       abi: RewardsContractAbi,
