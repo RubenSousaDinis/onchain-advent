@@ -39,7 +39,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         }}
       >
         <QueryClientProvider client={queryClient}>
-          <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
+          <WagmiProvider config={wagmiConfig}>
             <div className="flex flex-col min-h-screen">
               <Header />
               <main className="container mx-auto mt-6">{children}</main>

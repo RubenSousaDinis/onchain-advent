@@ -3,8 +3,6 @@
 export function getEnvVariable(key: string, defaultValue: string | undefined = undefined, required = true): string {
   let value = process.env[key];
 
-  console.log("key", key);
-  console.log("process.env", process.env);
   if (required && typeof defaultValue === "undefined" && (!value || value.trim() === "")) {
     throw new Error(`Environment variable ${key} is not set or is empty`);
   }

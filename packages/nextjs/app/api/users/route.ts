@@ -5,6 +5,7 @@ import { createSupabaseClient } from "~~/app/supabase/server";
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
+  const smartWalletAddress = body.smartWalletAddress;
   const privyUser = await privyClient.getUser(body.privy_id);
   if (!privyUser) {
     return NextResponse.json({ error: 401 });
@@ -29,7 +30,10 @@ export async function POST(request: NextRequest) {
   const wallet = embeddedWallet.address.toLowerCase();
 
   // TODO: call talent API to fetch data
-  const response = await supabase.from("users").insert({ privy_id: privyUser.id, wallet }).select();
+  const response = await supabase
+    .from("users")
+    .insert({ privy_id: privyUser.id, wallet, smart_wallet: smartWalletAddress })
+    .select();
 
   if (response.error) {
     return NextResponse.json({ error: response.error.message });
