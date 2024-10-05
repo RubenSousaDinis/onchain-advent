@@ -16,7 +16,7 @@ contract RewardsContract {
 	// State Variables
 	address public immutable owner;
 	uint256 public totalSponsorships = 0;
-	uint256 public maxRewardsPerExercise = 100;
+	uint256 public maxClaimersPerExercise = 100;
 	mapping(address => uint) public sponsorships;
 	// Mapping to track rewards by ID
     mapping(uint256 => uint256) public exerciseRewardPool;
@@ -30,9 +30,9 @@ contract RewardsContract {
 		uint256 value
 	);
 
-	event RewardSet(uint256 rewardId, uint256 amount);
-	event Whitelisted(uint256 rewardId, address wallet);
-    event RewardClaimed(address indexed claimant, uint256 rewardId, uint256 amount);
+	event RewardSet(uint256 exerciseId, uint256 amount);
+	event Whitelisted(uint256 exerciseId, address wallet);
+    event RewardClaimed(address indexed claimant, uint256 exerciseId, uint256 amount);
 
 	// Events: a way to emit log statements from smart contract that can be listened to by external parties
 	event RewardClaimed(
@@ -78,46 +78,46 @@ contract RewardsContract {
 	}
 
     // Function to set rewards, can only be called by the owner
-    function setReward(uint256 rewardId, uint256 amount) external onlyOwner {
+    function setReward(uint256 exerciseId, uint256 amount) external onlyOwner {
         require(amount > 0, "Reward amount must be greater than 0");
         
         // Set the reward amount for the specified ID
-        exerciseRewardPool[rewardId] = amount;
+        exerciseRewardPool[exerciseId] = amount;
 
         // Emit RewardSet event
-        emit RewardSet(rewardId, amount);
+        emit RewardSet(exerciseId, amount);
     }
 
-	    // Function to set rewards, can only be called by the owner
-    function whitelistWallet(uint256 rewardId, address wallet) external onlyOwner {
-        require(exerciseRewardClaimers[rewardId] < maxRewardsPerExercise, "Max winners reached");
+	// Function to set rewards, can only be called by the owner
+    function whitelistWallet(uint256 exerciseId, address wallet) external onlyOwner {
+        require(exerciseRewardClaimers[exerciseId] < maxClaimersPerExercise, "Max winners reached");
         
         // Set the reward amount for the specified ID
-        exerciseRewardClaimers[rewardId] += 1;
-		whitelistedRewardsAddresses[rewardId][wallet] = true;
+        exerciseRewardClaimers[exerciseId] += 1;
+		whitelistedRewardsAddresses[exerciseId][wallet] = true;
 
         // Emit RewardSet event
-        emit Whitelisted(rewardId, wallet);
+        emit Whitelisted(exerciseId, wallet);
     }
 
-	// Function for sponsors to claim rewards
-    function claimReward(uint256 rewardId) external {
-        uint256 totalRewardAmount = exerciseRewardPool[rewardId];
+	// Function for whitelisted wallets to claim rewards
+    function claimReward(uint256 exerciseId) external {
+        uint256 totalRewardAmount = exerciseRewardPool[exerciseId];
         require(totalRewardAmount > 0, "Reward not set for this ID");
-		require(whitelistedRewardsAddresses[rewardId][msg.sender], "Not whitelisted");
-        require(claimedRewards[msg.sender][rewardId] == 0, "Reward already claimed");
+		require(whitelistedRewardsAddresses[exerciseId][msg.sender], "Not whitelisted");
+        require(claimedRewards[msg.sender][exerciseId] == 0, "Reward already claimed");
 
-		uint256 rewardAmount = totalRewardAmount / maxRewardsPerExercise;
+		uint256 rewardAmount = totalRewardAmount / maxClaimersPerExercise;
 
         // Mark reward as claimed
-        claimedRewards[msg.sender][rewardId] = rewardAmount;
+        claimedRewards[msg.sender][exerciseId] = rewardAmount;
 
         // Transfer the reward to the claimant
         (bool success, ) = payable(msg.sender).call{value: rewardAmount}("");
         require(success, "Reward claim failed");
 
         // Emit RewardClaimed event
-        emit RewardClaimed(msg.sender, rewardId, rewardAmount);
+        emit RewardClaimed(msg.sender, exerciseId, rewardAmount);
     }
 
 	// Fallback function to accept plain ETH transfers

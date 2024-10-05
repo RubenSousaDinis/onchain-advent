@@ -32,7 +32,7 @@ const deployedContracts = {
             {
               indexed: false,
               internalType: "uint256",
-              name: "rewardId",
+              name: "exerciseId",
               type: "uint256"
             },
             {
@@ -70,7 +70,7 @@ const deployedContracts = {
             {
               indexed: false,
               internalType: "uint256",
-              name: "rewardId",
+              name: "exerciseId",
               type: "uint256"
             },
             {
@@ -108,7 +108,7 @@ const deployedContracts = {
             {
               indexed: false,
               internalType: "uint256",
-              name: "rewardId",
+              name: "exerciseId",
               type: "uint256"
             },
             {
@@ -125,7 +125,7 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "rewardId",
+              name: "exerciseId",
               type: "uint256"
             }
           ],
@@ -198,7 +198,7 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "maxRewardsPerExercise",
+          name: "maxClaimersPerExercise",
           outputs: [
             {
               internalType: "uint256",
@@ -226,7 +226,7 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "rewardId",
+              name: "exerciseId",
               type: "uint256"
             },
             {
@@ -283,7 +283,7 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "rewardId",
+              name: "exerciseId",
               type: "uint256"
             },
             {
