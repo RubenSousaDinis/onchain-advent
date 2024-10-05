@@ -1,11 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "~~/constants";
 
 export const createSupabaseClient = () => {
-  if (!process.env.NEXT_SUPABASE_URL) {
-    throw "Missing NEXT_SUPABASE_URL";
-  }
-  if (!process.env.NEXT_SUPABASE_ANON_KEY) {
-    throw "Missing NEXT_SUPABASE_ANON_KEY";
-  }
-  return createClient(process.env.NEXT_SUPABASE_URL, process.env.NEXT_SUPABASE_ANON_KEY);
+  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 };

@@ -3,6 +3,7 @@
 import { ethers } from "ethers";
 import { redirect } from "next/navigation";
 import { createSupabaseClient } from "~~/app/supabase/server";
+import { DEPLOYED_CONTRACTS_JSON_RPC_URL } from "~~/constants";
 
 // Define a server action
 async function handleFormSubmit(formData: FormData) {
@@ -23,7 +24,7 @@ async function handleFormSubmit(formData: FormData) {
   const abi = [exercise.function_abi];
   const functionName = abi[0].match(/function (\w+)/)[1];
 
-  const provider = new ethers.JsonRpcProvider("http://localhost:8545");
+  const provider = new ethers.JsonRpcProvider(DEPLOYED_CONTRACTS_JSON_RPC_URL);
   const contract = new ethers.Contract(contractAddress, abi, provider);
 
   const response = await contract[functionName]();

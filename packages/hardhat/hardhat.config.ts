@@ -99,7 +99,7 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey]
     },
     base: {
-      url: "https://mainnet.base.org",
+      url: "https://base-sepolia-rpc.publicnode.com",
       accounts: [deployerPrivateKey]
     },
     baseSepolia: {
