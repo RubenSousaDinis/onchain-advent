@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
 
     if (passport) {
       createParams = {
-        talent_passport_id: passport.id,
+        talent_passport_id: passport.passport_id,
         builder_score: passport.score,
         bio: passport.passport_profile.bio,
         name: passport.passport_profile.display_name,
