@@ -1,5 +1,6 @@
 "use client";
 
+import { usePrivy } from "@privy-io/react-auth";
 import { useEffect, useState } from "react";
 import { type IExercise } from "~~/types/IExercise";
 
@@ -9,6 +10,7 @@ export default function Exercise({ params }: { params: { id: string } }) {
   const [contractAddress, setContractAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successSubmissionMessage, setSuccessSubmissionMessage] = useState("");
+  const { authenticated } = usePrivy();
 
   const onSubmit = () => {
     console.debug("Submitting.............");
@@ -78,18 +80,20 @@ export default function Exercise({ params }: { params: { id: string } }) {
     return (
       <div>
         <table>
-          <tr>
-            <th>ID</th>
-            <td>{exercise.id}</td>
-          </tr>
-          <tr>
-            <th>Date</th>
-            <td>{exercise.date}</td>
-          </tr>
-          <tr>
-            <th>Description</th>
-            <td>{exercise.description}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{exercise.id}</td>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <td>{exercise.date}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{exercise.description}</td>
+            </tr>
+          </tbody>
         </table>
 
         <h1>Submit your solution by giving the address to your deployed contract</h1>
@@ -105,9 +109,13 @@ export default function Exercise({ params }: { params: { id: string } }) {
             onChange={onContractAddressChange}
           />
         </div>
-        <button onClick={onSubmit}>Submit</button>
+        <button onClick={onSubmit} disabled={!authenticated}>
+          Submit
+        </button>
 
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+
+        {!authenticated && <p style={{ color: "red" }}>You have to be logged in to submit your solution.</p>}
 
         {successSubmissionMessage && <p style={{ color: "green" }}>{successSubmissionMessage}</p>}
       </div>
