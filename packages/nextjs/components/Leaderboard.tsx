@@ -56,7 +56,7 @@ export const Leaderboard = ({ sponsors }: LeaderboardProps) => {
                   <div className="avatar">
                     <div className="mask mask-squircle h-12 w-12">
                       <div className="avatar">
-                        <div className="w-24 rounded-full">
+                        <div className="rounded-full">
                           <img src={sponsor.profile_picture_url} alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
