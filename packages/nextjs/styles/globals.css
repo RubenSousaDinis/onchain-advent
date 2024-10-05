@@ -19,6 +19,22 @@ h4 {
   line-height: 1;
 }
 
+.markdown h1 {
+  line-height: 5rem;
+}
+
+.markdown h2 {
+  line-height: 4rem;
+}
+
+.markdown h3 {
+  line-height: 3rem;
+}
+
+.markdown h4 {
+  line-height: 2rem;
+}
+
 p {
   margin: 1rem 0;
 }
