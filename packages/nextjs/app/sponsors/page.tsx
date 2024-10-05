@@ -29,7 +29,6 @@ export default function Page() {
       });
 
       const { data } = await result.json();
-      console.log("sponsors", data);
       setSponsors(data);
     })();
   }, []);

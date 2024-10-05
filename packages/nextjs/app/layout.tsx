@@ -15,8 +15,6 @@ export async function generateMetadata() {
     title: "Exercise of the Day - Onchain Advent"
   };
 
-  console.debug("other", other);
-
   return {
     ...main,
     other

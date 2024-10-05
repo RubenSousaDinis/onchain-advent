@@ -6,6 +6,7 @@ import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { usePrivy } from "@privy-io/react-auth";
 import { useEffect } from "react";
 import { Address } from "viem";
+import usePimlico from "~~/hooks/scaffold-eth/usePimlico";
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
@@ -15,22 +16,31 @@ export const LoginButton = () => {
   // Disable login when Privy is not ready or the user is already authenticated
   const disableLogin = !ready || (ready && authenticated);
 
+  const { predictSmartAccountAddress } = usePimlico();
+
   const walletAddress = user?.wallet?.address;
 
   useEffect(() => {
     if (user?.id) {
-      const params = {
-        privy_id: user.id
-      };
-
       (async () => {
+        const smartWallet = await predictSmartAccountAddress();
+
+        if (!smartWallet) {
+          return;
+        }
+
+        const params = {
+          privy_id: user.id,
+          smartWalletAddress: smartWallet
+        };
+
         await fetch("/api/users", {
           method: "POST",
           body: JSON.stringify(params)
         });
       })();
     }
-  }, [user?.id]);
+  }, [user?.id, predictSmartAccountAddress]);
 
   return (
     <>

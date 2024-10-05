@@ -2143,6 +2143,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@privy-io/wagmi-connector@npm:^0.1.13":
+  version: 0.1.13
+  resolution: "@privy-io/wagmi-connector@npm:0.1.13"
+  peerDependencies:
+    "@privy-io/react-auth": ^1.33.0
+    react: ^18
+    react-dom: ^18
+    viem: ">=0.3.35"
+    wagmi: ">=1.4.12 <2"
+  checksum: 7d9bdae4729b2fc8d3aebbdf3d748ae842b9325237125b65e898cec6b8e740783f5be5ae6b9d7f953c37a91cc914007bad86e6443954ed0815b05c75e3eb13b0
+  languageName: node
+  linkType: hard
+
 "@privy-io/wagmi@npm:^0.2.12":
   version: 0.2.12
   resolution: "@privy-io/wagmi@npm:0.2.12"
@@ -2436,6 +2449,7 @@ __metadata:
     "@privy-io/react-auth": latest
     "@privy-io/server-auth": ^1.14.1
     "@privy-io/wagmi": ^0.2.12
+    "@privy-io/wagmi-connector": ^0.1.13
     "@rainbow-me/rainbowkit": 2.1.6
     "@supabase/ssr": ^0.5.1
     "@supabase/supabase-js": ^2.45.4
@@ -2460,6 +2474,7 @@ __metadata:
     next: ~14.2.11
     next-nprogress-bar: ~2.3.13
     next-themes: ~0.3.0
+    permissionless: ^0.2.5
     postcss: ~8.4.45
     prettier: ~2.8.4
     qrcode.react: ~3.1.0
@@ -12059,7 +12074,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"permissionless@npm:^0.2.1":
+"permissionless@npm:^0.2.1, permissionless@npm:^0.2.5":
   version: 0.2.5
   resolution: "permissionless@npm:0.2.5"
   peerDependencies:
