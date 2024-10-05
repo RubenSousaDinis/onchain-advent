@@ -4,6 +4,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { CheckCircle, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import MarkdownRenderer from "~~/components/MarkdownRenderer";
 import { type IExercise } from "~~/types/IExercise";
 
 export default function Exercise({ params }: { params: { id: string } }) {
@@ -82,28 +83,7 @@ export default function Exercise({ params }: { params: { id: string } }) {
             <h2 className="card-title text-xl mb-4">
               {new Date(exercise.date).toLocaleDateString("en-us", { day: "numeric", month: "long" })}
             </h2>
-            <p className="mb-4">{exercise.description}</p>
-            <div className="mockup-code mb-4">
-              <pre>
-                <code>
-                  {`contract Inefficient {
-                    uint256[] public numbers;
-                    
-                    function addNumber(uint256 _number) public {
-                        numbers.push(_number);
-                    }
-                    
-                    function sum() public view returns (uint256) {
-                        uint256 total = 0;
-                        for (uint256 i = 0; i < numbers.length; i++) {
-                            total += numbers[i];
-                        }
-                        return total;
-                    }
-                }`}
-                </code>
-              </pre>
-            </div>
+            <MarkdownRenderer markdown={exercise.description} />
             <div className="flex items-center gap-4">
               <Clock className="w-5 h-5" />
               <span>
@@ -127,7 +107,7 @@ export default function Exercise({ params }: { params: { id: string } }) {
                 <div className="flex items-center gap-4">
                   <input
                     type="text"
-                    placeholder="Type tour transaction hash here"
+                    placeholder="Contract deployment transaction hash"
                     className="input w-full max-w-xs"
                     required
                     value={transactionHash}
