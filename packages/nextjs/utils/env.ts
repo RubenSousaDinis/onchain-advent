@@ -7,7 +7,7 @@ export function getEnvVariable(key: string, defaultValue: string | undefined = u
     throw new Error(`Environment variable ${key} is not set or is empty`);
   }
 
-  if (!required && (!value || value?.trim() === "") && typeof defaultValue !== "undefined") {
+  if (required && (!value || value?.trim() === "") && typeof defaultValue !== "undefined") {
     value = defaultValue;
   }
 
