@@ -63,7 +63,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ error: "Transaction hash does not deploy a smart contract" }, { status: 400 });
     }
 
-    if (receipt.from != user.wallet && ENV != "development") {
+    if (receipt.from.toLowerCase() != user.wallet.toLowerCase() && ENV != "development") {
       return NextResponse.json({ error: "Transaction hash must be your privy wallet" }, { status: 400 });
     }
 
