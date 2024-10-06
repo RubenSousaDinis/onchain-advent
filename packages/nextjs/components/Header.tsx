@@ -1,7 +1,6 @@
 "use client";
 
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useRef, useState } from "react";
@@ -100,8 +99,12 @@ export const Header = () => {
           )}
         </div>
         <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
-          <div className="flex relative w-10 h-10">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
+          <div className="flex relative ">
+            <div className="avatar w-10 h-10">
+              <div className="rounded-full">
+                <img alt="SE2 logo" className="cursor-pointer" src="/onchain_advent.png" />
+              </div>
+            </div>
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight text-lg">Onchain Advent</span>
