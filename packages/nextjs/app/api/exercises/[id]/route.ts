@@ -7,15 +7,19 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
   const privyUserId = headers.get("x-privy-user-id");
 
+  console.debug("privyUserId", privyUserId);
+
   const supabase = createSupabaseClient();
   const { data: exercise, error } = await supabase.from("exercises").select("*").eq("id", exerciseId).maybeSingle();
 
   const { data: submission, error: submissionError } = await supabase
     .from("submissions")
-    .select("*, exercises(*), users(*)")
+    .select("*, exercises!inner(id), users!inner(id)")
     .eq("exercises.id", exerciseId)
     .eq("users.privy_id", privyUserId)
     .maybeSingle();
+
+  console.debug("submission", submission);
 
   if (error) {
     console.error(error);
