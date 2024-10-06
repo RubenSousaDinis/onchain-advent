@@ -1,80 +1,65 @@
-# 🏗 Scaffold-ETH 2
+# Introduction
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+Are you fun of [Advent of Code](https://adventofcode.com/)?
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+Then you will love this project.
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+It is inspired by the same idea.
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+But, it is implemented in the Web3/Blockchain world!.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+24 Exercises, starting December 1st and ending December 24th, will challenge your
+Web3/Blockchain knowledge.
 
-## Requirements
+They are in increasing level of difficulty and, it goes without saying, the moment
+you solve the exercise, you are eligible for rewards from our sponsors.
 
-Before you begin, you need to install the following tools:
+# Developers
 
-- [Node (>= v18.18)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+But you have landed on this Github repo, haven't you?
 
-## Quickstart
+If you kneed to know how we have built this project, here is is how.
 
-To get started with Scaffold-ETH 2, follow the steps below:
+## Scaffold ETH 2
 
-1. Install dependencies if it was skipped in CLI:
+We have used [Scaffold ETH 2](https://scaffoldeth.io/) to bootstrap the repository.
 
-```
-cd my-dapp-example
-yarn install
-```
+This gave us a quite good head start. Both at the Smart Contract level with the Hardhat
+integration and at the Web application level with the Next.js integration.
 
-2. Run a local network in the first terminal:
+All the libraries and tools carefully selected were in place.
 
-```
-yarn chain
-```
+So, we immediately started turning our idea in real code-flesh.
 
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/hardhat/hardhat.config.ts`.
+### Smart Contract(s)
 
-3. On a second terminal, deploy the test contract:
+Working at the Smart Contract level, you have to be in the directory [packages/hardhat](./packages/hardhat/).
 
-```
-yarn deploy
-```
+### Next.js application
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
+Working at the Web application, you have to be in the directory [packages/nextjs](./packages/nextjs/).
 
-4. On a third terminal, start your NextJS app:
+### Working With the Codebase
 
-```
-yarn start
-```
+Since we relied on Scaffold ETH 2, it is a good idea to get familiar with that by reading [their docs](https://docs.scaffoldeth.io/).
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+## Environment Variables
 
-Run smart contract test with `yarn hardhat:test`
+You need to have a `.env.local` file inside the [./packages/nextjs](./packages/nextjs/) folder. Make a copy of the
+[./packages/nextjs/.env.example](./packages/nextjs/.env.example) and set the correct values.
 
-- Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/hardhat/deploy`
+## SUPABASE DATABASE
 
+You need to set up a [Supabase](https://supabase.com/) database and set the corresponding credentials in the `.env.local` environment.
 
-## Documentation
+# Live
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+The application is running live [here](https://onchainadvent.xyz).
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+Our current deployment integrates with Base Sepolia Testnet.
 
-## Contributing to Scaffold-ETH 2
+# Authors
 
-We welcome contributions to Scaffold-ETH 2!
+[Ruben](https://github.com/RubenSousaDinis/) and [Panos](https://github.com/pmatsinopoulos).
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+Work done during the ETHRome Sep 2024, started in the Friday evening (Oct 4th) and finished in the Sunday morning (Oct 6th).
